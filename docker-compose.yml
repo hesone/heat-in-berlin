@@ -1,0 +1,25 @@
+# Full local stack: Django API on :8000, Next.js on :3000 (talking to the API from the browser).
+services:
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      DJANGO_ALLOWED_HOSTS: "localhost,127.0.0.1,api"
+      CORS_ALLOWED_ORIGINS: "http://localhost:3000"
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health')"]
+      interval: 5s
+      retries: 10
+  web:
+    build:
+      context: ./web
+      args:
+        NEXT_PUBLIC_API_URL: "http://localhost:8000"
+    ports:
+      - "3000:3000"
+    depends_on:
+      api:
+        condition: service_healthy

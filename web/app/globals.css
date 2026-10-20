@@ -1,0 +1,56 @@
+@import "tailwindcss";
+@import "@fontsource/ibm-plex-sans/400.css";
+@import "@fontsource/ibm-plex-sans/500.css";
+@import "@fontsource/ibm-plex-sans/600.css";
+@import "@fontsource/ibm-plex-sans/700.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/600.css";
+
+/* Design tokens (Heat in Berlin redesign). Text colours on white: ink 16:1, muted 7.9:1, subtle 10:1. */
+@theme {
+  --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --color-ink: #1b1f24;
+  --color-subtle: #3a414a;
+  --color-muted: #4a525c;
+  --color-line: #d9dde2;
+  --color-line-soft: #e5e7eb;
+  --color-field: #c4cad1;
+  --color-ground: #f3f4f6;
+  --color-chip: #eef0f3;
+  --color-accent: #1d4ed8;
+  --color-accent-strong: #1e3a8a;
+  --color-warn-bg: #fff4d6;
+  --color-warn-fg: #6b4a00;
+  --color-ok-fg: #146c43;
+  --color-heat-bg: #fff1e6;
+  --color-heat-fg: #5c3410;
+  --color-pv-bg: #eef3fd;
+  --color-pv-fg: #1a2363;
+}
+
+html,
+body {
+  background: var(--color-ground);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+a {
+  color: var(--color-accent);
+}
+a:hover {
+  color: var(--color-accent-strong);
+}
+
+/* Visible keyboard focus everywhere, including the map canvas */
+:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+.maplibregl-canvas:focus-visible {
+  outline-offset: -3px;
+}
+.maplibregl-ctrl-attrib {
+  font-size: 11px;
+}

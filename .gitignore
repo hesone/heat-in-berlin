@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+node_modules/
+.next/
+out/
+coverage/
+test-results/
+playwright-report/
+.env*
+!.env.example
+.DS_Store
+
+# third-party source PDFs: read locally, not redistributed
+data/sources/*.pdf
