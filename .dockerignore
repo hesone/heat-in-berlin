@@ -3,4 +3,5 @@
 **/__pycache__
 .git
 data/raw
+data/sources
 web
