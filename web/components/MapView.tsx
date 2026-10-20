@@ -106,6 +106,10 @@ export function MapView({
   const drawRef = useRef<TerraDraw | null>(null);
   const prevSelected = useRef<number | null>(null);
   const prevHex = useRef<number | null>(null);
+  // With cacheComponents, Next.js hides a route with React <Activity> when the user navigates away (e.g. to
+  // /methodology) instead of unmounting it: effect cleanups run, and the effects run again when the route is
+  // shown. The map is then destroyed and rebuilt, so the camera is kept here to restore the same view.
+  const camera = useRef<{ center: [number, number]; zoom: number; bearing: number; pitch: number } | null>(null);
   const handlers = useRef({ onSelect, onPolygon, onHexClick, onMoveStart, drawing, layer });
   useEffect(() => {
     handlers.current = { onSelect, onPolygon, onHexClick, onMoveStart, drawing, layer };
@@ -119,8 +123,7 @@ export function MapView({
     const map = new maplibregl.Map({
       container: container.current,
       style: BASEMAP === "none" ? BLANK_STYLE : BASEMAP,
-      bounds: meta.bbox,
-      fitBoundsOptions: { padding: 24 },
+      ...(camera.current ?? { bounds: meta.bbox, fitBoundsOptions: { padding: 24 } }),
       attributionControl: false,
     });
     map.addControl(
@@ -240,6 +243,14 @@ export function MapView({
     });
 
     return () => {
+      const c = map.getCenter();
+      camera.current = { center: [c.lng, c.lat], zoom: map.getZoom(), bearing: map.getBearing(), pitch: map.getPitch() };
+      // The next map starts without sources or layers: block the effects below until its "load" fires,
+      // and forget feature-state ids that belonged to this map.
+      setLoaded(false);
+      setKeyboardFocus(false);
+      prevSelected.current = null;
+      prevHex.current = null;
       drawRef.current?.stop();
       drawRef.current = null;
       map.remove();

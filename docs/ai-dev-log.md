@@ -137,3 +137,13 @@ Bugs found in review (agent, from screenshots and test failures, before handing 
 
 Measured after the redesign: first render median 2,747 ms (was 2,947); Lighthouse Performance 63 (was 67),
 TBT 1,910 ms (was 1,310). Single runs, same environment; not checked for variance.
+
+## 2026-10-21: Navigation bug, map ↔ methodology
+
+| What | Produced by | Review |
+|---|---|---|
+| Hesam reported a bug in navigation between the methodology page and the map | Hesam (bug report) | n/a |
+| Reproduced in headless Chromium: map → Methodology → "Back to the map" showed Next's "This page couldn't load"; page error `Cannot read properties of undefined (reading 'setData')` | agent | pending |
+| Cause: with `cacheComponents`, Next.js 16 hides routes with React `<Activity>` instead of unmounting them. Leaving the map ran the map effect's cleanup (`map.remove()`); returning re-ran it and built a new map, but the `loaded` state was still `true` from the old map, so the data effect called `setData` on a source the new map did not have yet | agent (diagnosis, confirmed in `node_modules/next/dist/docs/01-app/02-guides/preserving-ui-state.md`) | pending |
+| Fix in `MapView.tsx`: the cleanup stores the camera, resets `loaded`, keyboard-focus state and the remembered feature-state ids; the new map starts from the stored camera | agent | pending |
+| New Playwright test: map → methodology → back; asserts the map has buildings again, the same centre/zoom, and no page errors. Fails on the previous `MapView.tsx` (timeout), passes with the fix; all 4 e2e tests pass | agent | pending |

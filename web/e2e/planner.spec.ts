@@ -115,3 +115,35 @@ test("grid layer: click a hexagon, then analyse it", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Hexagon" })).toBeVisible();
   await expect(page.getByTestId("band-label")).not.toBeEmpty();
 });
+
+test("navigate to the methodology page and back: the map is rebuilt with the same view", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  await page.goto("/");
+  await page.waitForFunction(() => window.__waermeMetrics !== undefined);
+  const before = await page.evaluate(async () => {
+    const map = window.__waermeMap!;
+    map.jumpTo({ center: [13.305, 52.507], zoom: 16 });
+    await new Promise<void>((r) => map.once("idle", () => r()));
+    return { lng: map.getCenter().lng, lat: map.getCenter().lat, zoom: map.getZoom() };
+  });
+
+  await page.getByRole("link", { name: /methodology/i }).first().click();
+  await expect(page).toHaveURL(/\/methodology$/);
+  await expect(page.getByRole("heading", { level: 1, name: /methodology/i })).toBeVisible();
+
+  await page.getByRole("link", { name: /back to the map/i }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await page.waitForFunction(() => {
+    const map = window.__waermeMap;
+    return !!map && map.loaded() && !!map.getSource("buildings") && map.queryRenderedFeatures({ layers: ["buildings-fill"] }).length > 0;
+  });
+  const after = await page.evaluate(() => {
+    const map = window.__waermeMap!;
+    return { lng: map.getCenter().lng, lat: map.getCenter().lat, zoom: map.getZoom() };
+  });
+  expect(after.zoom).toBeCloseTo(before.zoom, 3);
+  expect(after.lng).toBeCloseTo(before.lng, 5);
+  expect(after.lat).toBeCloseTo(before.lat, 5);
+  expect(errors).toEqual([]);
+});

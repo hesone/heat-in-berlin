@@ -74,7 +74,7 @@ python3 backend/scripts/fetch_osm.py               # Overpass → data/raw/charl
 ```bash
 cd backend && ../.venv/bin/python -m pytest         # 67 tests
 cd web && npm test                                  # 41 tests
-cd web && npm run test:e2e                          # 3 Playwright tests
+cd web && npm run test:e2e                          # 4 Playwright tests
 ```
 
 ## Methodology in short

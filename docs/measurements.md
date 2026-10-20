@@ -71,4 +71,4 @@ CLS 0, Speed Index 1.6 s. Both are single runs; the difference has not been chec
 |---|---|---|
 | pytest (backend: estimation, classification, pipeline, analysis, API, benchmarks) | 67 | `cd backend && pytest` |
 | Vitest + Testing Library (legend, panels, search, formatting, band scale, CSV, errors, Python parity) | 41 | `cd web && npm test` |
-| Playwright end-to-end (draw + CSV download, keyboard selection, hexagon analysis) | 3 | `cd web && npm run test:e2e` |
+| Playwright end-to-end (draw + CSV download, keyboard selection, hexagon analysis, methodology round trip) | 4 | `cd web && npm run test:e2e` |
