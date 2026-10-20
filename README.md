@@ -18,7 +18,7 @@ federal *Leitfaden Wärmeplanung*, and shows a precomputed hexagon heat-density 
 
 _Screenshots taken with the offline blank basemap used in tests; the deployed app uses an OpenFreeMap basemap._
 
-**Live demo:** _not deployed yet_
+**Live demo:** https://heat-in-berlin.vercel.app/ (static demo mode: precomputed data, area analysis runs in the browser)
 
 ## Features
 

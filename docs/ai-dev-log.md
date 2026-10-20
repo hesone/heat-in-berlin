@@ -147,3 +147,11 @@ TBT 1,910 ms (was 1,310). Single runs, same environment; not checked for varianc
 | Cause: with `cacheComponents`, Next.js 16 hides routes with React `<Activity>` instead of unmounting them. Leaving the map ran the map effect's cleanup (`map.remove()`); returning re-ran it and built a new map, but the `loaded` state was still `true` from the old map, so the data effect called `setData` on a source the new map did not have yet | agent (diagnosis, confirmed in `node_modules/next/dist/docs/01-app/02-guides/preserving-ui-state.md`) | pending |
 | Fix in `MapView.tsx`: the cleanup stores the camera, resets `loaded`, keyboard-focus state and the remembered feature-state ids; the new map starts from the stored camera | agent | pending |
 | New Playwright test: map → methodology → back; asserts the map has buildings again, the same centre/zoom, and no page errors. Fails on the previous `MapView.tsx` (timeout), passes with the fix; all 4 e2e tests pass | agent | pending |
+
+## 2026-10-21: Deployment check
+
+| What | Produced by | Review |
+|---|---|---|
+| Hesam deployed `web/` to Vercel (https://heat-in-berlin.vercel.app/) and pushed to https://github.com/hesone/heat-in-berlin | Hesam | n/a |
+| Live render time not measured: the browser pane's site permissions block the Vercel URL, and neither the agent's container nor the linked Mac shell can reach vercel.app. Confirmed only that `/` and `/methodology` are served (methodology shows OSM timestamp 2026-10-20T18:06:39Z) | agent | open |
+| `.github/workflows/ci.yml` was not in the pushed repo (README listed GitHub Actions); agent re-created it, same jobs as the original | agent | pending |
