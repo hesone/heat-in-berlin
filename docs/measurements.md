@@ -46,7 +46,16 @@ After the UI redesign (same script, same environment, same day):
 |---|---|
 | 2424, 2627, 2632, 2747, 2751, 2904, 2977 | **2,747 ms** for 4,885 buildings |
 
-Not yet measured: the same script against the live Vercel URL on a real GPU.
+### Live deployment (2026-10-21)
+
+Same script, run by Hesam on his MacBook Air against the Vercel deployment:
+`node scripts/measure-render.mjs https://heat-in-berlin.vercel.app/ 7`. Playwright's Chromium in its default
+(headless) mode, OpenFreeMap basemap (the deployed default), static demo mode, over Hesam's internet connection,
+so network transfer of the 3.5 MB building file is included. Whether headless Chromium used the GPU was not recorded.
+
+| Runs (ms, sorted) | Median |
+|---|---|
+| 1833, 1852, 1872, 1891, 2045, 2055, 2066 | **1,891 ms** for 4,885 buildings |
 
 ## Lighthouse (2026-10-20)
 
